@@ -46,6 +46,9 @@ jobs:
       # The demo config's webServer builds and starts the app itself.
       # Secrets are optional: without them the app's plain fallback answers,
       # so the recording still completes.
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
       - name: Record the flow and convert to mp4 + gif
         run: npm run demo:video
         env:
