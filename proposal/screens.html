@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>LaporKaki — seven screen drawings</title>
+  <style>
+    /* Glass and capsule tokens adapted from a studio glass stylesheet.
+       Inlined for this standalone drawing; palette and type narrowed to the brief. */
+    :root {
+      --ink: #000;
+      --page: #fff;
+      --accent: #0a84ff;
+      --tint: #e2edfc;
+      --line: rgba(0, 0, 0, .14);
+      --glass: rgba(255, 255, 255, .86);
+      --shadow: 0 12px 30px -18px rgba(0, 0, 0, .24);
+      --font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      --small: 12px;
+      --body: 16px;
+      --heading: 22px;
+      --display: 32px;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: var(--page); color: var(--ink); font: var(--body)/1.45 var(--font); -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, p { margin: 0; }
+    h1, .display { font-size: var(--display); line-height: 1.12; letter-spacing: -.035em; font-weight: 700; text-wrap: balance; }
+    h2 { font-size: var(--heading); line-height: 1.2; letter-spacing: -.025em; text-wrap: balance; }
+    h3 { font-size: var(--body); line-height: 1.35; }
+    a { color: var(--ink); text-underline-offset: 4px; }
+    button, input, select, textarea { font: inherit; color: var(--ink); }
+    button { cursor: default; }
+    input, textarea { caret-color: var(--accent); }
+    ::placeholder { color: var(--ink); opacity: 1; }
+    ::selection { color: var(--ink); background: var(--tint); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    * { scrollbar-width: thin; scrollbar-color: var(--accent) var(--page); }
+    .skip { position: absolute; left: 16px; top: -100px; padding: 12px; background: var(--page); z-index: 2; }
+    .skip:focus { top: 8px; }
+    .wrap { max-width: 1280px; margin: auto; padding: 32px 24px 48px; }
+    .intro { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .intro p { margin-top: 8px; max-width: 65ch; }
+    .small, small { font-size: var(--small); line-height: 1.4; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-size: var(--small); font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--tint); white-space: nowrap; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .contents { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 12px; }
+    .contents a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; font-size: var(--small); }
+    .contents a:hover { background: var(--tint); border-color: var(--accent); }
+    .contents b { font-variant-numeric: tabular-nums; }
+    .scope { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr)); align-items: start; gap: 36px 24px; margin-top: 28px; }
+    .shot { margin: 0; min-width: 0; scroll-margin-top: 16px; }
+    .phone { width: min(100%, 390px); height: 844px; margin-inline: auto; display: flex; flex-direction: column; background: var(--page); border: 1px solid var(--line); border-radius: 32px; box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .32); overflow: hidden; }
+    .system { height: 34px; flex: 0 0 34px; display: flex; align-items: center; justify-content: space-between; padding: 8px 24px 0; font-size: var(--small); font-weight: 600; }
+    .system svg { width: 46px; height: 12px; }
+    .appbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 52px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -.02em; }
+    .brand svg { width: 22px; height: 22px; color: var(--accent); }
+    .appbar .small { white-space: nowrap; }
+    .content { flex: 1; min-height: 0; padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow: auto; }
+    .content.compact { gap: 10px; padding-top: 16px; }
+    .content > * { flex-shrink: 0; }
+    .content .grow { flex-shrink: 1; }
+    .content.inbox-content, .content.pledge-content { gap: 8px; }
+    .inbox-content .glass, .pledge-content .glass { padding: 12px; }
+    .content.inbox-content .photo, .content.pledge-content .photo { height: 96px; }
+    .pledge-content .stack { gap: 10px; }
+    .heading { display: flex; flex-direction: column; gap: 6px; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .row > * { min-width: 0; }
+    .stack { display: flex; flex-direction: column; gap: 12px; }
+    .glass { padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--glass); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); box-shadow: var(--shadow); }
+    .glass h3 + p { margin-top: 4px; }
+    .glass .row + p { margin-top: 8px; }
+    .notice { padding: 12px 14px; border-radius: 12px; background: var(--tint); font-size: var(--small); }
+    .photo { position: relative; flex-shrink: 0; height: 184px; border-radius: 18px; border: 1px solid var(--line); background: #f4f4f4; overflow: hidden; }
+    .photo svg { display: block; width: 100%; height: 100%; }
+    .photo.home-photo { height: 228px; margin-top: 8px; }
+    .photo.mini { height: 124px; }
+    .photo.ticket-photo { height: 160px; }
+    .photo-label { position: absolute; left: 10px; bottom: 10px; background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; font-size: var(--small); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .buttons { display: flex; gap: 8px; }
+    .buttons > * { flex: 1; min-width: 0; }
+    .buttons .btn { padding-inline: 10px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; border: 1px solid var(--line); padding: 10px 14px; border-radius: 999px; background: var(--glass); color: var(--ink); font-weight: 600; line-height: 1.25; text-align: center; box-shadow: 0 3px 10px -8px rgba(0, 0, 0, .24); }
+    .btn.primary { background: var(--tint); border-color: rgba(10, 132, 255, .45); }
+    .btn svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--accent); }
+    .btn.full { width: 100%; }
+    .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .field > span { font-size: var(--small); font-weight: 600; }
+    input:not([type="checkbox"]), select, textarea { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 10px; background: var(--page); padding: 10px 12px; line-height: 1.3; }
+    textarea { resize: vertical; min-height: 66px; }
+    .field-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .footer { flex-shrink: 0; padding: 12px 20px 18px; border-top: 1px solid var(--line); background: var(--glass); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+    .footer p { text-align: center; margin-top: 8px; font-size: var(--small); }
+    .tabs { display: flex; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--glass); }
+    .tabs span { flex: 1; min-height: 44px; display: grid; place-items: center; padding: 6px; font-size: var(--small); border-radius: 999px; }
+    .tabs .selected { background: var(--tint); font-weight: 600; }
+    .grow { flex: 1; }
+    .timeline { list-style: none; margin: 4px 0 0; padding: 0; }
+    .timeline li { position: relative; padding: 0 0 28px 36px; }
+    .timeline li:last-child { padding-bottom: 0; }
+    .timeline li::before { content: ""; position: absolute; width: 18px; height: 18px; left: 0; top: 2px; border: 1px solid var(--line); border-radius: 50%; background: var(--page); }
+    .timeline li:not(:last-child)::after { content: ""; position: absolute; left: 8px; top: 25px; bottom: 4px; width: 1px; background: var(--line); }
+    .timeline .current::before { border: 5px solid var(--accent); background: var(--page); }
+    .timeline p { font-size: var(--small); margin-top: 4px; }
+    .ticket-list { list-style: none; padding: 0; margin: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .ticket-list li { padding: 10px 12px; }
+    .ticket-list li + li { border-top: 1px solid var(--line); }
+    .ticket-list .selected { background: var(--tint); }
+    .ticket-list p { margin-top: 3px; font-size: var(--small); }
+    .detail { display: flex; flex-direction: column; gap: 10px; }
+    .detail dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: var(--small); }
+    dl { margin: 0; }
+    dd { margin: 0; text-align: right; }
+    .number { font-variant-numeric: tabular-nums; }
+    .table-panel { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; padding: 4px; background: var(--glass); }
+    table { border-collapse: collapse; width: 100%; font-size: var(--small); font-variant-numeric: tabular-nums; }
+    th, td { text-align: right; padding: 14px 8px; }
+    th:first-child, td:first-child { text-align: left; padding-left: 14px; }
+    th:last-child, td:last-child { padding-right: 14px; }
+    thead { background: var(--tint); }
+    tbody tr { border-top: 1px solid var(--line); }
+    tbody th { font-size: var(--body); }
+    .bar { display: flex; height: 8px; background: #eee; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .bar span { width: 55%; background: var(--accent); }
+    .checks { display: flex; align-items: flex-start; gap: 10px; font-size: var(--small); }
+    .checks input { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--accent); }
+    .checks span { padding-top: 2px; }
+    figcaption { max-width: 390px; margin: 14px auto 0; font-size: var(--small); line-height: 1.5; }
+    figcaption strong { display: block; font-size: var(--body); margin-bottom: 4px; }
+    .closing { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .symbols { position: absolute; width: 0; height: 0; overflow: hidden; }
+    @media (max-width: 600px) {
+      .wrap { padding: 24px 12px 32px; }
+      .intro { flex-direction: column; gap: 10px; }
+      .intro p { margin-top: 6px; }
+      .contents { margin-top: 16px; }
+      .content { padding-inline: 16px; }
+      .appbar, .footer { padding-inline: 16px; }
+      .gallery { gap: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      .contents, .skip { display: none; }
+      .wrap { padding: 0; }
+      .gallery { display: block; }
+      .shot { break-inside: avoid; margin: 24px 0; }
+      .phone { box-shadow: none; }
+      .content { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#screens">Skip to drawings</a>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="mark" viewBox="0 0 24 24"><path d="M7 3h10a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-5l-5 4v-4a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8M8 12h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="system-icons" viewBox="0 0 46 12"><path d="M1 10V8M5 10V6M9 10V4M13 10V2" fill="none" stroke="#000" stroke-width="2"/><path d="M18 4c4-4 8-4 12 0m-9 3c2-2 4-2 6 0" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round"/><circle cx="24" cy="10" r="1" fill="#000"/><rect x="34" y="2" width="9" height="8" rx="2" fill="none" stroke="#000"/><path d="M36 4h5v4h-5zM45 5v2" fill="#000" stroke="#000"/></symbol>
+      <symbol id="camera" viewBox="0 0 24 24"><path d="M8 5l2-2h4l2 2h4a2 2 0 0 1 2 2v12H2V7a2 2 0 0 1 2-2h4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="8" cy="8" r="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 17l6-6 4 4 3-3 5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="road-drawing" viewBox="0 0 350 220">
+        <rect width="350" height="220" fill="#f4f4f4"/>
+        <path d="M0 38h350v22H0z" fill="#e4e4e4"/>
+        <path d="M0 60h350M0 84h350M0 38h350M48 38v22m74-22v22m74-22v22m74-22v22" fill="none" stroke="#aaa" stroke-width="1"/>
+        <path d="M0 85h350v135H0z" fill="#eee"/>
+        <path d="M12 170h64m198 0h64" fill="none" stroke="#fff" stroke-width="6"/>
+        <path d="M119 127c12-13 27-5 42-13 18-8 42 1 51 11 8 9 19 12 13 23-5 11-24 9-36 15-16 7-44-1-55-7-13-6-26-18-15-29Z" fill="#d1d1d1" stroke="#777" stroke-width="1.5"/>
+        <path d="M137 135c13-9 21-4 36-10m-27 23 14 4m31-21 15 9" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="239" cy="105" r="17" fill="#fff" stroke="#0a84ff" stroke-width="1.5"/>
+        <path d="M243 102a4 4 0 1 0-8 0c0 3 4 7 4 7s4-4 4-7Z" fill="none" stroke="#0a84ff" stroke-width="1.5"/>
+      </symbol>
+      <symbol id="path-drawing" viewBox="0 0 350 220">
+        <rect width="350" height="220" fill="#f4f4f4"/>
+        <path d="M100 0h140l74 220H30Z" fill="#e6e6e6"/>
+        <path d="M100 0 30 220M240 0l74 220" fill="none" stroke="#999" stroke-width="1.5"/>
+        <path d="M7 68h65M284 68h57M8 95h52m239 0h42" fill="none" stroke="#c6c6c6" stroke-width="1.5"/>
+        <path d="m132 98 12-4 5 13-12 4Zm58 38 14-4 6 12-17 6Zm-33 41 9-5 8 9-9 5Z" fill="#fff" stroke="#777" stroke-width="1.5"/>
+        <path d="m215 87 8 3-4 12-8-3Z" fill="#d1d1d1" stroke="#777" stroke-width="1.5"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main class="wrap">
+    <header>
+      <div class="intro">
+        <div>
+          <h1>LaporKaki</h1>
+          <p>Seven screen drawings for approval. Not a functional app.</p>
+        </div>
+        <span class="badge"><span class="dot" aria-hidden="true"></span>Demo only</span>
+      </div>
+      <nav class="contents" aria-label="Screen drawings">
+        <a href="#screen-01-home"><b>01</b> Home</a>
+        <a href="#screen-02-photo"><b>02</b> Photo &amp; place</a>
+        <a href="#screen-03-review"><b>03</b> AI draft</a>
+        <a href="#screen-04-ticket"><b>04</b> Ticket</a>
+        <a href="#screen-05-inbox"><b>05</b> Council inbox</a>
+        <a href="#screen-06-dashboard"><b>06</b> Public dashboard</a>
+        <a href="#screen-07-pledge"><b>07</b> Help &amp; pledge</a>
+      </nav>
+      <p class="scope small">Edit the fields to review. Buttons are drawings. Sample data only; no council receives a report and no money moves.</p>
+    </header>
+
+    <section class="gallery" id="screens" aria-label="Seven phone-first screens">
+      <figure class="shot" id="screen-01-home">
+        <div class="phone" role="group" aria-label="Home drawing">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small">Demo</span></div>
+          <div class="content">
+            <div class="heading"><h2 class="display">Spot a problem?<br>Report it.</h2><p>Turn a photo into a clear report.</p></div>
+            <div class="photo home-photo"><svg role="img" aria-label="Illustration of a pothole beside a kerb"><use href="#road-drawing"/></svg><span class="photo-label">Problem photo · drawing</span></div>
+            <button class="btn primary full" type="button" aria-disabled="true" title="Drawing only — no action"><svg aria-hidden="true"><use href="#camera"/></svg>Report a problem<svg aria-hidden="true"><use href="#arrow"/></svg></button>
+            <p class="small">You check the draft before sending.</p>
+            <div class="grow"></div>
+            <div class="glass"><h3>From report to repair</h3><p class="small">Sent → In progress → Fixed</p></div>
+            <p class="small">This demo uses an inbox inside LaporKaki, not a real council system.</p>
+          </div>
+          <div class="footer"><div class="tabs" aria-label="Drawn navigation"><span class="selected">Report</span><span>Dashboard</span><span>Help out</span></div></div>
+        </div>
+        <figcaption><strong>01 · Home</strong>Start a report with one clear action. Status after: No ticket</figcaption>
+      </figure>
+
+      <figure class="shot" id="screen-02-photo">
+        <div class="phone" role="group" aria-label="Photo and place drawing">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small">Photo &amp; place</span></div>
+          <div class="content compact">
+            <div class="heading"><h2>Show the problem</h2><p class="small">Keep people out of the photo.</p></div>
+            <div class="photo"><svg role="img" aria-label="Sample problem photo drawn as a pothole"><use href="#road-drawing"/></svg><span class="photo-label">Sample photo · drawing</span></div>
+            <div class="buttons">
+              <button class="btn" type="button" aria-disabled="true" title="Drawing only — no camera opens"><svg aria-hidden="true"><use href="#camera"/></svg>Camera</button>
+              <button class="btn" type="button" aria-disabled="true" title="Drawing only — no file opens"><svg aria-hidden="true"><use href="#image"/></svg>Choose photo</button>
+            </div>
+            <h3>Where is it?</h3>
+            <button class="btn full" type="button" aria-disabled="true" title="Drawing only — no location permission requested"><svg aria-hidden="true"><use href="#pin"/></svg>Use my location</button>
+            <p class="small">GPS shown: SS15, Subang Jaya · demo</p>
+            <label class="field"><span>Or enter a place</span><input type="text" value="Jalan SS 15/4, Subang Jaya" autocomplete="off"></label>
+            <p class="small">No GPS? Type the place instead.</p>
+            <div class="grow"></div>
+            <p class="notice">Location stays a suggestion until you check it.</p>
+          </div>
+          <div class="footer"><button class="btn primary full" type="button" aria-disabled="true" title="Drawing only — no AI call">Get a draft<svg aria-hidden="true"><use href="#arrow"/></svg></button><p>Preview only · no photo is uploaded</p></div>
+        </div>
+        <figcaption><strong>02 · Photo &amp; place</strong>Choose a photo; use GPS or enter the place. Status after: Draft</figcaption>
+      </figure>
+
+      <figure class="shot" id="screen-03-review">
+        <div class="phone" role="group" aria-label="Editable AI report draft drawing">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small">AI draft</span></div>
+          <div class="content compact">
+            <div class="heading"><h2>Check before you send</h2><p class="small">AI suggestions · every field is editable</p></div>
+            <label class="field"><span>Title</span><input type="text" value="Pothole by the kerb" autocomplete="off"></label>
+            <div class="field-pair">
+              <label class="field"><span>Category</span><select><option selected>Road</option><option>Drain</option><option>Litter</option><option>Park</option><option>Other</option></select></label>
+              <label class="field"><span>Severity</span><select><option>Low</option><option selected>Medium</option><option>High</option></select></label>
+            </div>
+            <label class="field"><span>Place</span><input type="text" value="Jalan SS 15/4, Subang Jaya" autocomplete="off"></label>
+            <div class="field-pair">
+              <label class="field"><span>Council</span><select><option>MBPJ</option><option selected>MBSJ</option><option>DBKL</option></select></label>
+              <label class="field"><span>Fixing body</span><select><option selected>Council</option><option>JKR</option><option>TNB</option><option>Air Selangor</option><option>KDEB</option><option>Alam Flora</option><option>IWK</option></select></label>
+            </div>
+            <label class="field"><span>Description</span><textarea rows="2">A pothole beside the kerb may trip people or damage wheels.</textarea></label>
+            <label class="field"><span>Suggested fix</span><textarea rows="2">Ask the council crew to inspect and patch the road.</textarea></label>
+            <p class="notice">AI can be wrong. Check the place, council and wording.</p>
+          </div>
+          <div class="footer"><button class="btn primary full" type="button" aria-disabled="true" title="Drawing only — nothing is sent">Hantar<svg aria-hidden="true"><use href="#arrow"/></svg></button><p>To the demo inbox only · not a real council</p></div>
+        </div>
+        <figcaption><strong>03 · AI draft</strong>Review and edit the report, then Hantar to the demo inbox. Status after: Sent</figcaption>
+      </figure>
+
+      <figure class="shot" id="screen-04-ticket">
+        <div class="phone" role="group" aria-label="Ticket status drawing">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small number">D-014</span></div>
+          <div class="content compact">
+            <div class="heading"><div class="row"><h2>Your report</h2><span class="badge"><span class="dot" aria-hidden="true"></span>Sent</span></div><p class="small">Saved in the demo inbox</p></div>
+            <div class="photo ticket-photo"><svg role="img" aria-label="Original problem drawing of a pothole"><use href="#road-drawing"/></svg><span class="photo-label">Original photo · drawing</span></div>
+            <div class="heading"><h3>Pothole by the kerb</h3><p class="small">Jalan SS 15/4, Subang Jaya<br>MBSJ · Road · Medium severity</p></div>
+            <div class="glass">
+              <h3>Track the repair</h3>
+              <ol class="timeline" aria-label="Sent, then In progress, then Fixed">
+                <li class="current" aria-current="step"><b>Sent</b><p>19 Nov 2026 · sample date</p></li>
+                <li><b>In progress</b><p>Not started</p></li>
+                <li><b>Fixed</b><p>Not fixed yet</p></li>
+              </ol>
+            </div>
+            <div class="grow"></div>
+            <p class="small">The council view marks progress or fixed in this demo, without promising a repair time.</p>
+          </div>
+          <div class="footer"><button class="btn full" type="button" aria-disabled="true" title="Drawing only — no action">Back to home</button><p>Demo status · nothing sent outside LaporKaki</p></div>
+        </div>
+        <figcaption><strong>04 · Ticket status</strong>See the path: Sent → In progress → Fixed. Status after: Sent</figcaption>
+      </figure>
+
+      <figure class="shot" id="screen-05-inbox">
+        <div class="phone" role="group" aria-label="Council inbox with selected report detail drawing">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small">Council view · demo</span></div>
+          <div class="content compact inbox-content">
+            <h2>Council inbox</h2>
+            <label class="field"><span>View council</span><select><option>MBPJ</option><option selected>MBSJ</option><option>DBKL</option></select></label>
+            <ul class="ticket-list" aria-label="Sample reports; first report selected">
+              <li class="selected"><div class="row"><h3>Pothole by the kerb</h3><span class="small">Sent</span></div><p>D-014 · SS15 · Medium</p></li>
+              <li><div class="row"><h3>Litter on park path</h3><span class="small">In progress</span></div><p>D-021 · SS15 · Low</p></li>
+            </ul>
+            <section class="glass detail" aria-label="Selected report detail">
+              <div class="row"><h3>Report D-014</h3><span class="badge">Sent</span></div>
+              <div class="field-pair">
+                <label class="field"><span>Council</span><select><option>MBPJ</option><option selected>MBSJ</option><option>DBKL</option></select></label>
+                <label class="field"><span>Fixing body</span><select><option selected>Council</option><option>JKR</option><option>TNB</option><option>Air Selangor</option><option>KDEB</option><option>Alam Flora</option><option>IWK</option></select></label>
+              </div>
+              <div class="photo mini"><svg role="img" aria-label="Selected report problem drawing"><use href="#road-drawing"/></svg><span class="photo-label">Photo · drawing</span></div>
+              <dl><dt>Place</dt><dd>Jalan SS 15/4, Subang Jaya</dd><dt>Category / severity</dt><dd>Road / Medium</dd></dl>
+              <p class="small">A pothole beside the kerb may trip people or damage wheels.</p>
+              <div><h3>Suggested fix</h3><p class="small">Ask the council crew to inspect and patch the road.</p></div>
+            </section>
+            <div class="grow"></div>
+            <p class="small">Choose In progress before marking Fixed.</p>
+          </div>
+          <div class="footer"><div class="buttons"><button class="btn primary" type="button" aria-disabled="true" title="Drawing only — status does not change">Mark In progress</button><button class="btn" type="button" aria-disabled="true" title="Drawing only — available after In progress">Mark Fixed</button></div><p>Internal demo inbox · not connected to a council</p></div>
+        </div>
+        <figcaption><strong>05 · Council inbox &amp; detail</strong>Review the report and mark progress, then fixed. Status after: In progress → Fixed</figcaption>
+      </figure>
+
+      <figure class="shot" id="screen-06-dashboard">
+        <div class="phone" role="group" aria-label="Public council dashboard drawing with demo figures">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small">Public view</span></div>
+          <div class="content compact">
+            <div class="heading"><h2>Reports &amp; repairs</h2><p class="small">All councils · all sample dates</p></div>
+            <p class="notice"><b>Demo figures only.</b> These are invented counts, not real council performance.</p>
+            <h3>By council</h3>
+            <div class="table-panel">
+              <table aria-label="Demo raised, solved and median days per council">
+                <thead><tr><th scope="col">Council</th><th scope="col">Raised</th><th scope="col">Solved</th><th scope="col">Median<br>days</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">MBPJ</th><td>12</td><td>8</td><td>6</td></tr>
+                  <tr><th scope="row">MBSJ</th><td>10</td><td>7</td><td>5</td></tr>
+                  <tr><th scope="row">DBKL</th><td>8</td><td>4</td><td>9</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="glass"><h3>What the numbers mean</h3><p class="small">Solved = marked Fixed in the demo.<br>Median days = the middle time from Sent to Fixed, for solved reports only.</p></div>
+            <p class="small">Sample dates are in the past. These figures do not predict a repair time.</p>
+            <div class="grow"></div>
+          </div>
+          <div class="footer"><div class="tabs" aria-label="Drawn navigation"><span>Report</span><span class="selected">Dashboard</span><span>Help out</span></div><p>Public demo · no sign-in</p></div>
+        </div>
+        <figcaption><strong>06 · Public dashboard</strong>Compare raised, solved and median days per council; all figures are demo data. Status after: Viewing demo figures</figcaption>
+      </figure>
+
+      <figure class="shot" id="screen-07-pledge">
+        <div class="phone" role="group" aria-label="Volunteer small job and pledge drawing">
+          <div class="system" aria-hidden="true"><span>9:41</span><svg><use href="#system-icons"/></svg></div>
+          <div class="appbar"><span class="brand"><svg aria-hidden="true"><use href="#mark"/></svg>LaporKaki</span><span class="small">Help out · demo</span></div>
+          <div class="content compact pledge-content">
+            <div class="heading"><h2>A small way to help</h2><p class="small">D-021 · SS15 park path · MBSJ</p></div>
+            <div class="photo mini"><svg role="img" aria-label="Illustration of ordinary litter on a park path"><use href="#path-drawing"/></svg><span class="photo-label">Problem photo · drawing</span></div>
+            <div class="heading"><div class="row"><h3>Pick up light litter</h3><span class="badge">In progress</span></div><p class="small">Council-approved small job · demo approval</p></div>
+            <p class="notice">Gloves on. Stay on the path. No road work, sharp items or heavy lifting. Stop if unsafe; leave hazards to the council.</p>
+            <button class="btn full" type="button" aria-disabled="true" title="Drawing only — no volunteer is registered">I can help</button>
+            <section class="glass stack" aria-label="Pledge promise">
+              <div><h3>Pledge for gloves &amp; bags</h3><div class="row"><p class="small">RM55 promised of RM100</p><span class="small">Demo</span></div><div class="bar" role="img" aria-label="Demo pledges: 55 of 100 ringgit promised"><span></span></div></div>
+              <label class="field"><span>Your promise (RM)</span><input type="number" min="1" step="1" value="10" inputmode="numeric" autocomplete="off"></label>
+              <label class="checks"><input type="checkbox"><span>I understand this is a promise, not a payment.</span></label>
+              <button class="btn primary full" type="button" aria-disabled="true" title="Drawing only — no pledge is saved">Make a pledge</button>
+            </section>
+            <p class="small">Pledges collect no money or payment details. The council view marks the job Fixed when done.</p>
+          </div>
+          <div class="footer"><p>Sample approval and pledges · not a live job</p></div>
+        </div>
+        <figcaption><strong>07 · Volunteer &amp; pledge</strong>Help with a safe, council-approved small job or promise support; no payments. Status after: In progress · Pledge promised (demo)</figcaption>
+      </figure>
+    </section>
+    <footer class="closing small">Drawings, not a functional app. Field edits stay on this page until reload; nothing is saved, uploaded or sent.</footer>
+  </main>
+</body>
+</html>

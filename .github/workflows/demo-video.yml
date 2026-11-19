@@ -1,0 +1,90 @@
+name: Demo video
+
+# Records the app flow (web/e2e/demo), converts it to mp4 + gif, attaches the
+# mp4 to a rolling release, and refreshes the GIF preview in README.md.
+# Bot commits touch only assets/ and README.md, so the paths filter below
+# prevents a re-record loop.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - ".github/workflows/demo-video.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demo-video
+  cancel-in-progress: true
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # The demo config's webServer builds and starts the app itself.
+      # Secrets are optional: without them the app's plain fallback answers,
+      # so the recording still completes.
+      - name: Record the flow and convert to mp4 + gif
+        run: npm run demo:video
+        env:
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          QWEN_MODEL: ${{ secrets.QWEN_MODEL }}
+
+      - name: Upload video artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-video
+          path: |
+            web/demo-video/demo.mp4
+            web/demo-video/demo.gif
+          retention-days: 30
+
+      - name: Attach mp4 to the rolling release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view demo --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create demo --repo "$GITHUB_REPOSITORY" \
+              --title "Demo video (rolling)" \
+              --notes "Auto-recorded app flow. Refreshed on every push to main." \
+              --latest=false
+          gh release upload demo demo-video/demo.mp4 --clobber --repo "$GITHUB_REPOSITORY"
+
+      - name: Commit GIF preview and README embed
+        run: |
+          mkdir -p ../assets
+          cp demo-video/demo.gif ../assets/demo-flow.gif
+          node scripts/embed-readme.mjs "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/demo/demo.mp4"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ../assets/demo-flow.gif ../README.md
+          if git diff --cached --quiet; then
+            echo "Preview and README unchanged; skipping commit."
+          else
+            git commit -m "chore: refresh demo flow preview [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi

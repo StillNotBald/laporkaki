@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-11-19T04:38:34.751Z",
+  "summary": "6 Qoder worker runs across 6 briefs wrote 0 files in 0.0 worker hours.",
+  "stats": [
+    {
+      "label": "Qoder worker runs",
+      "value": 6
+    },
+    {
+      "label": "Files written by Qoder",
+      "value": 0
+    },
+    {
+      "label": "Credits used",
+      "value": 0
+    },
+    {
+      "label": "Worker hours",
+      "value": 0
+    }
+  ]
+}
