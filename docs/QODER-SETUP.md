@@ -6,7 +6,7 @@ Plain version: a headless Qoder worker can edit files and run a short safe list 
 
 - `.qoder/settings.json` has `permissions.allow` and `permissions.deny` (rule format from the docs: `Bash(prefix:*)`, `Read(path)`). Deny wins over allow.
 - Allowed: `npm test`, `npm run typecheck|lint|build`, the same with `npm --prefix web ...`, `npx vitest`, `cd`, `node scripts/*`, `node scripts/find.mjs`, `ls`, `cat`, `grep`, `rg`, `git status|diff|log`.
-- Denied: every other git subcommand, `rm -r/-rf`, `rmdir`, `curl`, `wget`, `npm install|i|ci|add`, `npx create-*`, `sudo`, anything touching the local env file, `.env.local`/`.env.production`/`.env.development`/`.env.test`, or `FirstLeap`. Read/Edit are denied on the same paths. `.env.example` stays readable.
+- Denied: every other git subcommand, `rm -r/-rf`, `rmdir`, `curl`, `wget`, `npm install|i|ci|add`, `npx create-*`, `sudo`, anything touching the local env file, `.env.local`/`.env.production`/`.env.development`/`.env.test`, or other private project folders. Read/Edit are denied on the same paths. `.env.example` stays readable.
 - Four agents in `.qoder/agents/` (check with `qodercli agents list`):
   - `builder` (Qwen4-Max): one brief, named files, runs test and typecheck, report under 150 words.
   - `researcher` (Qwen4-Max): reads and uses the web, writes one file under `research/`.
